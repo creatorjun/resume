@@ -1,161 +1,278 @@
-/* src/App.css */
-* {
+/* ──────────────────────────────────────────
+   Design Tokens
+────────────────────────────────────────── */
+:root {
+  --bg-base:        #f4f4f5;
+  --bg-surface:     #ffffff;
+  --bg-header:      rgba(255, 255, 255, 0.85);
+  --bg-overlay:     rgba(244, 244, 245, 0.7);
+  --border:         #e4e4e7;
+  --text-primary:   #18181b;
+  --text-secondary: #71717a;
+  --text-disabled:  #a1a1aa;
+  --accent:         #6366f1;
+  --accent-hover:   #4f46e5;
+  --radius-sm:      6px;
+  --radius-md:      10px;
+  --radius-pill:    999px;
+  --shadow-sm:      0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:      0 4px 16px rgba(0,0,0,0.08);
+  --transition:     0.18s ease;
+  --content-max:    900px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-base:        #09090b;
+    --bg-surface:     #18181b;
+    --bg-header:      rgba(24, 24, 27, 0.88);
+    --bg-overlay:     rgba(9, 9, 11, 0.65);
+    --border:         #27272a;
+    --text-primary:   #fafafa;
+    --text-secondary: #a1a1aa;
+    --text-disabled:  #52525b;
+    --accent:         #818cf8;
+    --accent-hover:   #6366f1;
+    --shadow-sm:      0 1px 3px rgba(0,0,0,0.3);
+    --shadow-md:      0 4px 20px rgba(0,0,0,0.4);
+  }
+}
+
+/* ──────────────────────────────────────────
+   Reset / Base
+────────────────────────────────────────── */
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
 body {
-  font-family: "Pretendard", "Segoe UI", sans-serif;
-  background: #f5f5f5;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100dvh;
 }
 
-.viewer-container {
-  display: flex;
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
+#root {
+  height: 100dvh;
 }
 
-.sidebar {
-  width: 240px;
-  min-width: 240px;
-  background: #1e1e2e;
-  color: #cdd6f4;
-  display: flex;
-  flex-direction: column;
-  padding: 16px;
-  overflow-y: auto;
-}
-
-.sidebar-title {
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 16px;
-  color: #cba6f7;
-}
-
-.doc-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.doc-item {
-  padding: 10px 12px;
-  border-radius: 8px;
+button {
+  color: inherit;
+  font-family: inherit;
   cursor: pointer;
-  font-size: 14px;
-  transition: background 0.15s;
-  word-break: break-all;
 }
 
-.doc-item:hover {
-  background: #313244;
-}
-
-.doc-item.active {
-  background: #cba6f7;
-  color: #1e1e2e;
-  font-weight: 600;
-}
-
-.viewer-main {
-  flex: 1;
+/* ──────────────────────────────────────────
+   Layout Root
+────────────────────────────────────────── */
+.viewer-root {
   display: flex;
   flex-direction: column;
+  height: 100dvh;
   overflow: hidden;
+  max-width: var(--content-max);
+  width: 100%;
+  margin: 0 auto;
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
 }
 
+/* ──────────────────────────────────────────
+   Header
+────────────────────────────────────────── */
 .viewer-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 20px;
-  background: #ffffff;
-  border-bottom: 1px solid #e0e0e0;
   gap: 12px;
+  padding: 10px 16px;
+  background: var(--bg-header);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 10;
+  flex-shrink: 0;
 }
 
 .doc-title {
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 600;
-  color: #333;
-  flex: 1;
-  text-align: center;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px;
 }
 
-.nav-btn {
-  padding: 8px 16px;
-  border: 1px solid #cba6f7;
+/* ──────────────────────────────────────────
+   Zoom Controls
+────────────────────────────────────────── */
+.header-zoom {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg-base);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  padding: 3px 6px;
+}
+
+.zoom-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-pill);
+  border: none;
   background: transparent;
-  color: #6c3fc5;
-  border-radius: 6px;
+  color: var(--text-primary);
   cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  transition: background 0.15s;
+  transition: background var(--transition), color var(--transition);
 }
 
-.nav-btn:hover:not(:disabled) {
-  background: #ede7f6;
+.zoom-btn:hover:not(:disabled) {
+  background: var(--bg-surface);
+  color: var(--text-primary);
 }
 
-.nav-btn:disabled {
-  opacity: 0.3;
+.zoom-btn:disabled {
+  color: var(--text-disabled);
   cursor: not-allowed;
 }
 
-.viewer-footer {
+.zoom-value {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-primary);
+  min-width: 38px;
   text-align: center;
-  padding: 10px;
-  font-size: 13px;
-  color: #888;
-  background: #ffffff;
-  border-top: 1px solid #e0e0e0;
+  letter-spacing: 0.02em;
 }
 
-.status-screen {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  font-size: 16px;
-  color: #555;
-}
-
-.status-screen.error {
-  color: #e05252;
-}
-
-
-/* src/App.css */
+/* ──────────────────────────────────────────
+   Viewer Body
+────────────────────────────────────────── */
 .viewer-body {
   flex: 1;
-  overflow-y: auto;
+  overflow: auto;
+  background: var(--bg-base);
   position: relative;
-  background: #e8e8e8;
+  -webkit-overflow-scrolling: touch;
+}
+
+.docx-scroll-area {
+  width: 100%;
+  padding: 16px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
 }
 
 .docx-container {
-  padding: 20px;
+  box-sizing: border-box;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
 }
 
 .docx-wrapper {
-  background: white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  margin: 0 auto;
+  max-width: 100% !important;
+  margin: 0 auto !important;
+  background: #ffffff !important;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md) !important;
+  overflow: hidden;
+  color-scheme: light;
+  color: #000000;
 }
 
+/* ──────────────────────────────────────────
+   Render Overlay / Error
+────────────────────────────────────────── */
 .render-overlay {
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.8);
-  font-size: 16px;
-  color: #555;
-  z-index: 10;
+  background: var(--bg-overlay);
+  backdrop-filter: blur(4px);
+  z-index: 5;
+}
+
+.render-error {
+  margin: 20px auto;
+  max-width: 480px;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  font-size: 13px;
+  text-align: center;
+}
+
+@media (prefers-color-scheme: dark) {
+  .render-error {
+    background: #2d1515;
+    border-color: #7f1d1d;
+    color: #fca5a5;
+  }
+}
+
+/* ──────────────────────────────────────────
+   Status Screen
+────────────────────────────────────────── */
+.status-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  height: 100dvh;
+  background: var(--bg-base);
+}
+
+.status-text {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.status-text.error {
+  color: #ef4444;
+}
+
+/* ──────────────────────────────────────────
+   Spinner
+────────────────────────────────────────── */
+.status-spinner {
+  width: 28px;
+  height: 28px;
+  border: 2.5px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ──────────────────────────────────────────
+   Mobile
+────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .viewer-header {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .doc-title {
+    max-width: 160px;
+  }
 }

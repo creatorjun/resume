@@ -1,4 +1,3 @@
-// src/App.tsx
 import DocViewerPage from "./components/DocViewer";
 import "./App.css";
 
